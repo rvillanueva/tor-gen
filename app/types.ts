@@ -18,4 +18,5 @@ export type CultureType =
 export interface CharacterData {
   culture: CultureType | null;
   attributeSetId: string | null;
+  featureId: string | null;
 }

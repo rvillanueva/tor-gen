@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Select from "./Select";
 import { CharacterData, CultureType, StepType } from "./types";
+import { getDistinctiveFeatures } from "./tables";
 
 function getStep(character: CharacterData): StepType {
   if (!character.culture) return "start";
@@ -97,6 +98,10 @@ function Attributes({
   }[];
   const tempOption =
     tempOptions.find((c) => c.id === character.attributeSetId) || null;
+
+  const features = getDistinctiveFeatures();
+  const selectedFeature =
+    features.find((d) => d.id === character.featureId) || null;
   return (
     <div className="h-full flex flex-row justify-center items-center px-12">
       <div className="h-64">
@@ -117,14 +122,14 @@ function Attributes({
             .
           </div>
           <div>
-            In particular, they had a particular knack for{" "}
+            They were known for being{" "}
             <Select
-              options={tempOptions}
-              selected={tempOption}
+              options={features}
+              selected={selectedFeature}
               onChange={(selected) =>
                 setCharacter({
                   ...character,
-                  attributeSetId: selected.id,
+                  featureId: selected.id,
                 })
               }
             />
@@ -197,6 +202,7 @@ export default function Home() {
   const [character, setCharacter] = useState<CharacterData>({
     culture: null,
     attributeSetId: null,
+    featureId: null,
   });
   const [step, setStep] = useState<StepType>(getStep(character));
 
