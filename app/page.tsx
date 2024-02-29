@@ -34,8 +34,12 @@ function Culture({
   const cultures = [
     {
       id: "barding",
-      name: "Barding",
+      name: "Bardings",
     },
+    { id: "dwarf", name: "Dwarves of Durins Folk" },
+    { id: "hobbit", name: "Hobbits of the Shire" },
+    { id: "elf", name: "Elves of Linden" },
+    { id: "bree", name: "Men of Bree" },
   ] as {
     id: "barding" | "dwarf" | "elf" | "hobbit" | "elf" | "bree";
     name: string;
@@ -46,9 +50,10 @@ function Culture({
     <div className="h-full flex flex-row justify-center items-center">
       <div className="h-64">
         <div>
-          Here begins the tale of a{" "}
+          {"Ah yes, I've heard of the "}
           <Select
             className="w-48"
+            options={cultures}
             selected={cultureOption}
             onChange={(selected) =>
               setCharacter({
@@ -60,6 +65,73 @@ function Culture({
           .
         </div>
         {character.culture ? (
+          <button
+            className="rounded-md bg-gray-100 py-2 px-4"
+            onClick={onSubmit}
+          >
+            Next
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function Attributes({
+  character,
+  onSubmit,
+  setCharacter,
+}: {
+  character: CharacterData;
+  setCharacter: (character: CharacterData) => void;
+  onSubmit: () => void;
+}) {
+  const tempOptions = [
+    {
+      id: "1",
+      name: "strong, hardy, and quick-witted",
+    },
+  ] as {
+    id: string;
+    name: string;
+  }[];
+  const tempOption =
+    tempOptions.find((c) => c.id === character.attributeSetId) || null;
+  return (
+    <div className="h-full flex flex-row justify-center items-center px-12">
+      <div className="h-64">
+        <div>
+          One particular hero comes to mind. They say that this hero was{" "}
+          <div>
+            <Select
+              className="w-full"
+              options={tempOptions}
+              selected={tempOption}
+              onChange={(selected) =>
+                setCharacter({
+                  ...character,
+                  attributeSetId: selected.id,
+                })
+              }
+            />
+            .
+          </div>
+          <div>
+            In particular, they had a particular knack for{" "}
+            <Select
+              options={tempOptions}
+              selected={tempOption}
+              onChange={(selected) =>
+                setCharacter({
+                  ...character,
+                  attributeSetId: selected.id,
+                })
+              }
+            />
+            .
+          </div>
+        </div>
+        {character.attributeSetId ? (
           <button
             className="rounded-md bg-gray-100 py-2 px-4"
             onClick={onSubmit}
@@ -88,6 +160,14 @@ function StepContent({
       return (
         <Culture
           character={character}
+          onSubmit={() => setStep("attributes")}
+          setCharacter={setCharacter}
+        />
+      );
+    case "attributes":
+      return (
+        <Attributes
+          character={character}
           onSubmit={() => setStep("start")}
           setCharacter={setCharacter}
         />
@@ -114,7 +194,10 @@ function Book({ children }: { children: React.ReactNode[] | React.ReactNode }) {
 }
 
 export default function Home() {
-  const [character, setCharacter] = useState<CharacterData>({ culture: null });
+  const [character, setCharacter] = useState<CharacterData>({
+    culture: null,
+    attributeSetId: null,
+  });
   const [step, setStep] = useState<StepType>(getStep(character));
 
   return (

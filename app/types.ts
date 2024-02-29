@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Select from "./Select";
 import { get } from "http";
 
-export type StepType = "start" | "culture";
+export type StepType = "start" | "culture" | "attributes";
 
 export type CultureType =
   | "barding"
@@ -17,4 +17,5 @@ export type CultureType =
 
 export interface CharacterData {
   culture: CultureType | null;
+  attributeSetId: string | null;
 }

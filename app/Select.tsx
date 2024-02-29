@@ -2,19 +2,19 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
-const people = [{ id: "barding", name: "Barding" }];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Select({
+  options,
   className,
   selected,
   onChange,
 }: {
   className?: string;
   selected: { id: string; name: string } | null;
+  options: { id: string; name: string }[];
   onChange: (value: { id: string; name: string }) => void;
 }) {
   return (
@@ -42,16 +42,16 @@ export default function Select({
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {people.map((person) => (
+                {options.map((option) => (
                   <Listbox.Option
-                    key={person.id}
+                    key={option.id}
                     className={({ active }) =>
                       classNames(
                         active ? "bg-indigo-600 text-white" : "text-gray-900",
                         "relative cursor-default select-none py-2 pl-3 pr-9",
                       )
                     }
-                    value={person}
+                    value={option}
                   >
                     {({ selected, active }) => (
                       <>
@@ -61,7 +61,7 @@ export default function Select({
                             "block truncate",
                           )}
                         >
-                          {person.name}
+                          {option.name}
                         </span>
 
                         {selected ? (
